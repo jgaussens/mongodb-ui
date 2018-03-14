@@ -21,7 +21,7 @@ MongoClient.connect(url, function(err, db) {
 */
 
 var db
-var url = "mongodb://localhost:27017/";
+var url = "mongodb://localhost:27017/"
 
 MongoClient.connect(url, (err, client) => {
   if (err) return console.log(err)
@@ -43,13 +43,16 @@ app.get('/', (req, res) => {
 */
 
 
-app.get('/', (req, res) => {
-  var cursor = db.collection('restaurants').find({"cuisine": "Japanese", "borough": "Manhattan"},{"grades":1, "borough":1})
-})	
+
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
+  db.collection('restaurants').find({"cuisine": "Japanese", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
+  console.log(results)})
+  // send HTML file populated with quotes here
 })
+
+
 
 
 
