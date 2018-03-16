@@ -21,14 +21,14 @@ MongoClient.connect(url, function(err, db) {
 
 */
 
-var db
-var url = "mongodb://localhost:27017/"
-
+var db	
+//var url = "mongodb://localhost:27017/"
+var url = "mongodb://jgaussens:tekilahum5@ds115729.mlab.com:15729/restaurant_inspections" 
 
 //connection to the database
 MongoClient.connect(url, (err, client) => {
   if (err) return console.log(err)
-  db = client.db('restaurant_Inspections') // whatever your database name is
+  db = client.db('restaurant_inspections') // whatever your database name is
   app.listen(3000, () => {
     console.log('listening on 3000')
   })
