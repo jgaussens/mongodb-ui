@@ -3,6 +3,7 @@ const bodyParser= require('body-parser')
 const app = express()
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.set('view engine', 'ejs')
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -46,9 +47,12 @@ app.get('/', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
+  //res.sendFile(__dirname + '/index.html')
   db.collection('restaurants').find({"cuisine": "Japanese", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
-  console.log(results)})
+  //console.log(results)
+  res.render('index.ejs', {restaurants: results})
+  })
+  
   // send HTML file populated with quotes here
 })
 
