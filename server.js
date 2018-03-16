@@ -24,6 +24,8 @@ MongoClient.connect(url, function(err, db) {
 var db
 var url = "mongodb://localhost:27017/"
 
+
+//connection to the database
 MongoClient.connect(url, (err, client) => {
   if (err) return console.log(err)
   db = client.db('restaurant_Inspections') // whatever your database name is
@@ -33,19 +35,24 @@ MongoClient.connect(url, (err, client) => {
 })
 
 
-/*
-app.listen(3000, function() {
-  console.log('listening on 3000')
+/* exemple de requête d'insert lors du clic sur restaurant
+	
+	
+	app.post('/restaurants', (req, res) => {
+  db.collection('restaurants').save(req.body, (err, result) => {
+    if (err) return console.log(err)
+
+    console.log('saved to database')
+    res.redirect('/')
+  })
 })
 
-app.get('/', (req, res) => {
-  var cursor = db.collection('restaurants').find({})
-})
+	
 */
 
 
 
-
+//à l'ouverture de la page, quelle requête est executée ? 
 app.get('/', (req, res) => {
   //res.sendFile(__dirname + '/index.html')
   db.collection('restaurants').find({"cuisine": "Japanese", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
@@ -56,6 +63,14 @@ app.get('/', (req, res) => {
   // send HTML file populated with quotes here
 })
 
+
+app.post('/restaurants', (req, res) => {
+  db.collection('restaurants').find({"cuisine": "Jewish/Kosher", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
+	 res.render('index.ejs', {restaurants: results})
+
+    //res.redirect('/')
+  })
+})
 
 
 
