@@ -65,6 +65,7 @@ app.get('/', (req, res) => {
 
 
 app.post('/restaurants', (req, res) => {
+	console.log(req.body.name);
   db.collection('restaurants').find({"cuisine": "Jewish/Kosher", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
 	 res.render('index.ejs', {restaurants: results})
 
