@@ -55,7 +55,8 @@ MongoClient.connect(url, (err, client) => {
 //à l'ouverture de la page, quelle requête est executée ? 
 app.get('/', (req, res) => {
   //res.sendFile(__dirname + '/index.html')
-  db.collection('restaurants').find({"cuisine": "Japanese", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
+  //we send none for cuisine to print nothing in the front page in the "/restaurant"
+  db.collection('restaurants').find({"cuisine": "None", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
   //console.log(results)
   res.render('index.ejs', {restaurants: results})
   })
@@ -66,13 +67,28 @@ app.get('/', (req, res) => {
 
 app.post('/restaurants', (req, res) => {
 	console.log(req.body.name);
-  db.collection('restaurants').find({"cuisine": "Jewish/Kosher", "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
+	console.log(req.body.borough);
+  db.collection('restaurants').aggregate([ { "$unwind": "$grades"}, { $match: {"cuisine": req.body.name, "borough": req.body.borough}}, { "$group": { "_id": { "_id": "$_id", "name": "$name"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, avg: 1 } } ]).toArray(function(err, results) {
 	 res.render('index.ejs', {restaurants: results})
 
     //res.redirect('/')
   })
 })
 
+
+
+//requête post pour envoyer de la donnée, ici requête pour connaître grades d'une certaine cuisine à manhattan
+
+/*
+app.post('/restaurants', (req, res) => {
+	console.log(req.body.name);
+  db.collection('restaurants').find({"cuisine": req.body.name, "borough": "Manhattan"},{"grades":1, "borough":1}).toArray(function(err, results) {
+	 res.render('index.ejs', {restaurants: results})
+
+    //res.redirect('/')
+  })
+})
+*/
 
 
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+	  <meta charset="UTF-8">
+	  <title>MY APP</title>
+
+	</head>
+	
+
+	
+	<body>
+	  	
+
+		<form action="/restaurants" method="POST">
+		  <input type="text" placeholder="name" name="name">
+		  <input type="text" placeholder="quote" name="quote">
+		  <button type="submit">Submit</button>
+		</form>
+		
+		
+		<ul class="restaurants">
+		  <% for(var i=0; i<restaurants.length; i++) {%>
+		    <li class="restaurant">
+		      <span><%= restaurants[i].name %></span>
+		      <span><%= restaurants[i].restaurant_id %></span>
+		      <span><%= restaurants[i].address.coord.coordinates %></span>
+
+		    </li>
+		  <% } %>
+		</ul>
+		
+		
+	</body>
+	
+</html>

@@ -5,27 +5,81 @@
 	<head>
 	  <meta charset="UTF-8">
 	  <title>MY APP</title>
+
 	</head>
 	
+	<style>
+		#header {
+		  background-color: royalblue;
+		
+		  margin-bottom: 81px;
+		
+		  overflow: hidden;
+		}
+		
+		.wrap {
+		  width: 1152px;
+		
+		  margin: 0 auto;		
+		}
+		
+		#title-area {
+		font-family: Helvetica;
+		  display:block;
+		
+		  line-height: 108px;
+		
+		
+		  float: left;
+		}
+
+	</style>
+
+	
 	<body>
-	  May Node and Express be with you.
-	  
+	  	
+	  	
+	  	<div id="header">
+		    <div class="wrap">
+		        <div id="title-area">
+		            <h1 id="title">
+		                <a href="#">Restaurants Inspections</a>
+		            </h1>
+		        </div>
+		
+		    </div>
+		</div>
+
+		<form action="/restaurants" method="POST">
+		  <select id="cuisine" name="name">
+		  		<option value="None">Select Cuisine</option>
+
+		      <option value="Japanese">Japanese</option>
+		      <option value="American">American</option>
+		  </select>
+		   <select id="borough" name="borough">
+		  		<option value="None">Select a borough</option>
+
+		      <option value="Manhattan">Manhattan</option>
+		      <option value="Brooklyn">Brooklyn</option>
+		  </select>
+		  <button type="submit">Submit</button>
+		</form>
+		
+		
 		<ul class="restaurants">
 		  <% for(var i=0; i<restaurants.length; i++) {%>
 		    <li class="restaurant">
-		      <span><%= restaurants[i].name %></span>
-		      <span><%= restaurants[i].restaurant_id %></span>
-		      <span><%= restaurants[i].address.coord.coordinates %></span>
+		      <span><%= restaurants[i]._id.name %></span>
+		      <span><%= restaurants[i].avg %></span>
 
 		    </li>
 		  <% } %>
 		</ul>
-	
-		<form action="/restaurants" method="POST">
-		  <input type="text" placeholder="name" name="name">
-		  <input type="text" placeholder="quote" name="quote">
-		  <button type="submit">Submit</button>
-		</form>
+		
+		
 	</body>
 	
 </html>
+
+
