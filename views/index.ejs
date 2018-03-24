@@ -5,7 +5,7 @@
 	<head>
 	  <meta charset="UTF-8">
 	  <title>MY APP</title>
-
+<script src="https://cdn.plot.ly/plotly-latest.min.js"> </script>
 	</head>
 	
 	<style>
@@ -32,14 +32,29 @@
 		
 		  float: left;
 		}
+		
+		
+		table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
 
 	</style>
 
 	
 	<body>
-	  	
-	  	
-	  	<div id="header">
+	<div id="header">
 		    <div class="wrap">
 		        <div id="title-area">
 		            <h1 id="title">
@@ -49,35 +64,91 @@
 		
 		    </div>
 		</div>
-
-		<form action="/restaurants" method="POST">
-		  <select id="cuisine" name="name">
-		  		<option value="None">Select Cuisine</option>
-
-		      <option value="Japanese">Japanese</option>
-		      <option value="American">American</option>
-		  </select>
-		   <select id="borough" name="borough">
-		  		<option value="None">Select a borough</option>
-
-		      <option value="Manhattan">Manhattan</option>
-		      <option value="Brooklyn">Brooklyn</option>
-		  </select>
-		  <button type="submit">Submit</button>
-		</form>
 		
 		
-		<ul class="restaurants">
-		  <% for(var i=0; i<restaurants.length; i++) {%>
-		    <li class="restaurant">
-		      <span><%= restaurants[i]._id.name %></span>
-		      <span><%= restaurants[i].avg %></span>
+				
+				<div id="myDiv">
+		</div>
+		
+		<script>
+		
+		//did not worked
+		
+ function func(){
+			
+	
+			
+				var data = [{
+				  values: localStorage.getItem('myArray'), 
+				  labels: localStorage.getItem('myArray'),
+				  type: 'pie'
+				}];
+	
+			var layout = {
+			  height: 400,
+			  width: 500
+			};
+	
+	Plotly.newPlot('myDiv', dat, layout);
+	
+		}	
+		
+		</script>
+		
+		
 
-		    </li>
-		  <% } %>
-		</ul>
 		
 		
+		<div id ="form_detailed">
+			<h3> Searching for a restaurant ? You know the name ? Or you prefer to search by type of cuisine and neighboor ? All is possible in one form !  Fill only the fields you want, or all of them if you want ! </h3>
+
+			
+			<form action="/restaurants" method="POST">
+				<input type="text" name="restaurantName" id="restaurantName"  placeholder="Search by name (optionnal)">
+			  	<input type="text" name="cuisine" id="cuisine"  placeholder="Add type of cuisine (optionnal)">
+
+			   <select id="borough" name="borough">
+			  	<option value="Any">Any borough</option>
+			      <option value="Manhattan">Manhattan</option>
+			      <option value="Bronx">Bronx</option>
+			      <option value="Brooklyn">Brooklyn</option>
+			      <option value="Queens">Queens</option>
+			      <option value="Staten Island">Staten Island</option>
+			  </select>
+			  
+			  <select id="Sort" name="Sort">
+			      <option value="Best to worst">Best to worst</option>
+			      <option value="Worst to best">Worst to best</option>
+			  </select>
+			  <button type="submit">Submit</button>
+			</form>
+			</br>
+			
+			<h3> <%= restaurants.length %> Results found in our database </h3>
+			
+
+			
+			<table class="restaurants">
+			  <tr>
+			    <th>Name of restaurant</th>
+			    <th>Address of the restaurant</th>
+			    <th>Average of grades</th>
+			  </tr>
+			  
+			  <% var grades=[] %>
+			  <% for(var i=0; i<restaurants.length; i++) {%>
+			  	  <tr class ="restaurant">
+				    <td><%= restaurants[i]._id.name %></td>
+				    <td><%= restaurants[i]._id.building %> <%= restaurants[i]._id.street %> <%= restaurants[i]._id.zip %> <%= restaurants[i]._id.borough %></td>
+				    <td><%= restaurants[i].avg %></td>
+				    
+				  </tr>
+			  <% } %>
+			  
+			</table>
+		</div>
+		
+
 	</body>
 	
 </html>

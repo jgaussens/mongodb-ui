@@ -20,7 +20,10 @@
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",
     "express": "^4.16.3",
-    "mongodb": "^3.0.4"
+    "local-storage": "^1.4.2",
+    "localStorage": "^1.0.3",
+    "mongodb": "^3.0.4",
+    "plotly": "^1.0.6"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"
