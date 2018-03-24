@@ -11,7 +11,6 @@ const MongoClient = require('mongodb').MongoClient
 
 
 var db	
-//var url = "mongodb://localhost:27017/"
 var url = "mongodb://jgaussens:tekilahum5@ds115729.mlab.com:15729/restaurant_inspections" 
 
 //connection to the database
@@ -297,7 +296,5 @@ console.log(req.body.borough);
 app.post('/restaurants', (req, res) => {
   console.log(req.body)
 })
-
-console.log('May Node be with you')
 
 /* Once we’re done saving, we have to redirect the user somewhere (here we are in the current tutorial*/
