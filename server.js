@@ -39,20 +39,25 @@ app.get('/', (req, res) => {
 
 
 
-//Different cases of user usages of the form
+//Full form interpretation to print what the user wants
 app.post('/restaurants', (req, res) => {
 
+console.log(req.body.restaurantName);
 
-console.log(req.body.restaurantName.value);
-console.log(req.body.cuisine.value);
-console.log(req.body.borough.value);
+console.log(req.body.restaurantName);
+console.log(req.body.cuisine);
+console.log(req.body.borough);
 
 
 	//full form query case
 
-	if (typeof req.body.restaurantName.value != 'undefined' && typeof req.body.cuisine.value != 'undefined' && req.body.borough != 'Any'){
+	if ( req.body.restaurantName != '' &&  req.body.cuisine != '' && req.body.borough != 'Any'){
+	
+		console.log("VVV")
+
 	
 		if (req.body.Sort == "Worst to best"){
+	
 	
 					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}, "cuisine": req.body.cuisine, "borough": req.body.borough}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg: 1}} ]).toArray(function(err, results) {
 		
@@ -75,7 +80,10 @@ console.log(req.body.borough.value);
 	}	
 	
 		//no name defined
-		if (typeof req.body.restaurantName.value == 'undefined' && typeof req.body.cuisine.value != 'undefined' && req.body.borough != 'Any'){
+		if ( req.body.restaurantName == '' &&  req.body.cuisine != '' && req.body.borough != 'Any'){
+		
+				console.log("FVV")
+
 		
 			if (req.body.Sort == "Worst to best"){
 	
@@ -103,8 +111,11 @@ console.log(req.body.borough.value);
 
 		
 		
-		//no name and no cuisine defined
-		if (typeof req.body.restaurantName.value == 'undefined' && typeof req.body.cuisine.value == 'undefined' && req.body.borough != 'Any'){
+		//only borough defined
+		if ( req.body.restaurantName == '' &&  req.body.cuisine == '' && req.body.borough != 'Any'){
+		
+				console.log("FFV")
+
 		
 			if (req.body.Sort == "Worst to best"){
 	
@@ -129,8 +140,43 @@ console.log(req.body.borough.value);
 
 		}
 		
+		
+		//only cuisine defined
+		if ( req.body.restaurantName == '' &&  req.body.cuisine != '' && req.body.borough == 'Any'){
+		
+					console.log("FVF")
+
+
+		
+			if (req.body.Sort == "Worst to best"){
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {"cuisine": req.body.cuisine}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg: 1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			else{
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {"cuisine": req.body.cuisine}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg:-1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+
+
+
+		}
+		
+		
 		//nothing defined
-		if (typeof req.body.restaurantName.value == 'undefined' && typeof req.body.cuisine.value == 'undefined' && req.body.borough == 'Any'){
+		if ( req.body.restaurantName == '' &&  req.body.cuisine == '' && req.body.borough == 'Any'){
+		
+		
+		console.log("FFF");
 		
 			if (req.body.Sort == "Worst to best"){
 	
@@ -155,6 +201,95 @@ console.log(req.body.borough.value);
 
 		}
 		
+		
+		//name and borough defined
+		if ( req.body.restaurantName != '' &&  req.body.cuisine == '' && req.body.borough != 'Any'){
+		
+				console.log("VFV")
+
+			
+			if (req.body.Sort == "Worst to best"){
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}, "borough": req.body.borough}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg: 1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			else{
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}, "borough": req.body.borough}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg:-1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			
+			
+			
+		}
+		
+
+		//name and cuisine defined
+		if ( req.body.restaurantName != '' &&  req.body.cuisine != '' && req.body.borough == 'Any'){
+		
+			console.log("VVF")
+
+			
+			if (req.body.Sort == "Worst to best"){
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}, "cuisine": req.body.cuisine}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg: 1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			else{
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}, "cuisine": req.body.cuisine}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg:-1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			
+			
+			
+		}
+		
+		
+		//Only name defined
+		if ( req.body.restaurantName != '' &&  req.body.cuisine == '' && req.body.borough == 'Any'){
+			
+			console.log("VFF")
+
+			
+			if (req.body.Sort == "Worst to best"){
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg: 1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			else{
+	
+					  db.collection('restaurants').aggregate([ { "$unwind": "$grades"},{ $match: {name:{$regex:req.body.restaurantName}}},{ "$group": { "_id": { "_id": "$_id", "name": "$name", "building": "$address.building", "street": "$address.street", "zip": "$address.zipcode", "borough": "$borough"}, "avg": {$avg: "$grades.score"} } }, { "$project":{ "_id.name": 1, "_id.building": 1, "_id.street": 1, "_id.zip": 1, "_id.borough": 1, avg: 1 } }, {$sort: {avg:-1}} ]).toArray(function(err, results) {
+		
+				 res.render('index.ejs', {restaurants: results})
+			
+			  })
+				
+			}
+			
+			
+			
+		}		
 	
 })
 
