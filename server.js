@@ -297,4 +297,3 @@ app.post('/restaurants', (req, res) => {
   console.log(req.body)
 })
 
-/* Once we’re done saving, we have to redirect the user somewhere (here we are in the current tutorial*/
